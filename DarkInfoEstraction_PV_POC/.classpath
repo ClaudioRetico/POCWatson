@@ -26,5 +26,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Program Files/IBM/SQLLIB/java/db2jcc.jar"/>
+	<classpathentry kind="lib" path="C:/Program Files/IBM/SQLLIB/java/db2jcc_license_cu.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

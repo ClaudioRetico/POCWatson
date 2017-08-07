@@ -1,6 +1,8 @@
 package ibm.poc.watson.pv;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
@@ -18,16 +20,18 @@ import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Se
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.SentimentOptions;
 
 
-public class VediamoResponseNLU {
+public class ElaborazioneDBWatsonNONAdestrato {
 
 	private static NaturalLanguageUnderstanding service;
 	private static Features features;
+	private static Connection dbconn;
 
 	public static void main(String[] args) {
 		
 		final String text = "Risposta Definitiva 09.08.2016          09:33:19            BRUSCOL4 si chiude come da disposizioni ____________________ Risposta in Lavorazione Caso 08.08.2016          12:33:27            SIMONELLI l'up deve inviare a poste vita comunicazione chiara di quanto accaduto ____________________ Risposta in Lavorazione Caso 04.01.2016          10:07:49            SAVIROB1 pratica espressamente aperta su richiesta insistita di ops di up ops di up e contraente assicurata di polizza ad hoc scaduta ops di up dichiara di non aver ricevuto assistenza adeguata in precedenza dal servizio e di aver parlato con due operatrici di sesso femminile, di cui ricorda e segnala il nome di una, francesca inizialmente aveva richiesto possibilita di reinvestimento reimpiegando la somma a scadenza con possibilita di emettere 2 polizze fedelta ha ricevuto un'assistenza inadeguata, ricevendo prima informazione di possibilita di emissione di 2 polizze fedelta, mentre da una polizza in scadenza e possibile emettere soltanto 1 polizza fedelta inoltre ha ricevuto anche l'informazione che effettuando l'attivita della -revoca- avrebbe poi, richiedendo il pagamento della liquidazione, dalla ricezione del pagamento avrebbe potuto emettere comunque la polizza di reinvestimento fedelta; informata che l'attivita di -revoca- fa rinunciare alla possibilita del reimpiego, del reinvestimento ops di up allo stato attuale richiede risposta in forma scritta da parte di ufficio di compagnia sulla possibilita, visto che il reimpiego che aveva richiesto era di un importo parziale della somma a scadenza, di 2'000 euro su di una liquidazione per scadenza lorda di euro 5'358,88, di reinvestire dalla ricezione del pagamento della liquidazione almeno un parziale al netto della somma di 2'000 euro del reivestimento iniziale poi revocato. ops di up ora richiede risposta in forma scritta anche per mezzo mail UTO1536DIR@posteitaliane.it prego poter verificare, grazie ____________________ Richieste cliente 04.01.2016          10:07:48            SAVIROB1 pratica espressamente aperta su richiesta insistita di ops di up ops di up e contraente assicurata di polizza ad hoc scaduta ops di up dichiara di non aver ricevuto assistenza adeguata in precedenza dal servizio e di aver parlato con due operatrici di sesso femminile, di cui ricorda e segnala il nome di una, francesca inizialmente aveva richiesto possibilita di reinvestimento reimpiegando la somma a scadenza con possibilita di emettere 2 polizze fedelta ha ricevuto un'assistenza inadeguata, ricevendo prima informazione di possibilita di emissione di 2 polizze fedelta, mentre da una polizza in scadenza e possibile emettere soltanto 1 polizza fedelta inoltre ha ricevuto anche l'informazione che effettuando l'attivita della -revoca- avrebbe poi, richiedendo il pagamento della liquidazione, dalla ricezione del pagamento avrebbe potuto emettere comunque la polizza di reinvestimento fedelta; informata che l'attivita di -revoca- fa rinunciare alla possibilita del reimpiego, del reinvestimento ops di up allo stato attuale richiede risposta in forma scritta da parte di ufficio di compagnia sulla possibilita, visto che il reimpiego che aveva richiesto era di un importo parziale della somma a scadenza, di 2'000 euro su di una liquidazione per scadenza lorda di euro 5'358,88, di reinvestire dalla ricezione del pagamento della liquidazione almeno un parziale al netto della somma di 2'000 euro del reivestimento iniziale poi revocato. ops di up ora richiede r";
 
         initwatson();
+        initdb();
 
        
         long startTime = System.currentTimeMillis();
@@ -81,6 +85,18 @@ public class VediamoResponseNLU {
 				.build();
 
 		
+	}
+	
+	private static void initdb() {
+        try {
+			Class.forName("com.ibm.db2.jcc.DB2Driver");
+			dbconn = DriverManager.getConnection ("jdbc:db2://dashdb-entry-yp-dal09-10.services.dal.bluemix.net:50000/BLUDB", "dash13540", "Ah6tsLL@T2f@");
+			dbconn.setAutoCommit(false);
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 	private static AnalysisResults watsonanalisi(String text, NaturalLanguageUnderstanding service, Features features) {
