@@ -63,7 +63,7 @@ public class ElaborazioneDBWatsonNONAdestrato {
 
 				parseResponse(response);
 				
-				scriviRisultato(theSQLInsert,rs.getInt("CASE_ID"));
+				scriviRisultato(theSQLInsert,rs.getInt("CASE_ID"), millisecondsDuration);
 
 			}
 			;
@@ -152,22 +152,32 @@ public class ElaborazioneDBWatsonNONAdestrato {
 
 	}
 	
-	private static void scriviRisultato(PreparedStatement theInsert, int caseId) {
-		
+	private static void scriviRisultato(PreparedStatement theInsert, int caseId, long duration) {
 		
 		
 		try {
+			theInsert.setInt(1, caseId);
+			theInsert.setString(2, PrimaKeyword);
+			theInsert.setString(3, SecondaKeyword);			
+			theInsert.setString(4, TerzaKeyword);
+			theInsert.setDouble(5, RelevancePrimaKeyword.doubleValue());
+			theInsert.setDouble(6, RelevanceSecondaKeyword.doubleValue());			
+			theInsert.setDouble(7, RelevanceTerzaKeyword.doubleValue());	
+			theInsert.setString(8, PrimaCategory);
+			theInsert.setString(9, SecondaCategory);			
+			theInsert.setString(10, TerzaCategory);
+			theInsert.setDouble(11, RelevancePrimaCategory.doubleValue());
+			theInsert.setDouble(12, RelevanceSecondaCategory.doubleValue());			
+			theInsert.setDouble(13, RelevanceTerzaCategory.doubleValue());	
+			theInsert.setDouble(14, DocumentSentiment.doubleValue());	
+			theInsert.setInt(15, (int) duration);	
 			theInsert.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		try {
 			dbconn.commit();
-		} catch (SQLException e) {
+		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
+
 		
 		
 	}

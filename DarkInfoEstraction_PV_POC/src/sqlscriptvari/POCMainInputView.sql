@@ -7,5 +7,7 @@ SELECT
         PA_PV_COMPLETE comp
     WHERE EXISTS( select * 
                   from "DASH13540"."BaseID" bas
-                  where bas."Case ID"= comp."Case ID");
-
+                  where bas."Case ID"= comp."Case ID")
+    AND NOT EXISTS( select * 
+                  from "DASH13540"."POC_ResultNOLEARNING" elab
+                  where elab."Case ID"= comp."Case ID");
