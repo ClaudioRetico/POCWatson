@@ -14,6 +14,7 @@ import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Ca
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.CategoriesResult;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.ConceptsOptions;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesResult;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.KeywordsOptions;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.KeywordsResult;
@@ -27,7 +28,7 @@ public class ElaborazioneDBWatsonCONAdestramnto {
 	private static Features features;
 	private static Connection dbconn;
 	private static final String sqltxt = "SELECT CASE_ID, TEXT FROM DASH13540.POC_MAININPUTVIEW_SI_LEARNING";
-	private static final String sqlinsert = "INSERT INTO DASH13540.\"POC_ResultSILEARNING\" (\"Case ID\", \"PrimaKeyword\", \"SecondaKeyword\", \"TerzaKeyword\", \"RelevancePrimaKeyword\", \"RelevanceSecondaKeyword\", \"RelevanceTerzaKeyword\", \"PrimaCategory\", \"SecondaCategory\", \"TerzaCategory\", \"RelevancePrimaCategory\", \"RelevanceSecondaCategory\", \"RelevanceTerzaaCategory\", \"DocumentSentiment\", \"MillisecElaborazioneWatson\") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String sqlinsert = "INSERT INTO DASH13540.\"POC_ResultSILEARNING\" (\"Case ID\", \"PrimaKeyword\", \"SecondaKeyword\", \"TerzaKeyword\", \"RelevancePrimaKeyword\", \"RelevanceSecondaKeyword\", \"RelevanceTerzaKeyword\", \"PrimaCategory\", \"SecondaCategory\", \"TerzaCategory\", \"RelevancePrimaCategory\", \"RelevanceSecondaCategory\", \"RelevanceTerzaaCategory\", \"DocumentSentiment\", \"PrimaEntita\", \"SecondaEntita\", \"TerzaEntita\", \"SottotipoPrimaEntita\", \"SottotipoSecondaEntita\", \"SottotipoTerzaEntita\", \"ConteggioPrimaEntita\", \"ConteggioSecondaEntita\", \"ConteggioTerzaEntita\", \"Relazioni\", \"MillisecElaborazioneWatson\") VALUES(?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	private static String PrimaKeyword = "";
 	private static String SecondaKeyword = "";
 	private static String TerzaKeyword = "";
@@ -41,6 +42,16 @@ public class ElaborazioneDBWatsonCONAdestramnto {
 	private static Double RelevanceSecondaCategory = (double) 0;
 	private static Double RelevanceTerzaCategory = (double) 0;
 	private static Double DocumentSentiment = (double) 0;
+	private static String PrimaEntita = "";
+	private static String SecondaEntita = "";
+	private static String TerzaEntita = "";
+	private static String SottotipoPrimaEntita = "";
+	private static String SottotipoSecondaEntita = "";
+	private static String SottotipoTerzaEntita = "";
+	private static int ConteggioPrimaEntita = 0;
+	private static int ConteggioSecondaEntita = 0;
+	private static int ConteggioTerzaEntita = 0;
+	private static String Relazioni = "";
 
 	public static void main(String[] args) {
 
@@ -118,6 +129,29 @@ public class ElaborazioneDBWatsonCONAdestramnto {
 	}
 
 	private static void parseResponse(AnalysisResults response) {
+		PrimaKeyword = "";
+		SecondaKeyword = "";
+		TerzaKeyword = "";
+		RelevancePrimaKeyword = (double) 0;
+		RelevanceSecondaKeyword = (double) 0;
+		RelevanceTerzaKeyword = (double) 0;
+		PrimaCategory = "";
+		SecondaCategory = "";
+		TerzaCategory = "";
+		RelevancePrimaCategory = (double) 0;
+		RelevanceSecondaCategory = (double) 0;
+		RelevanceTerzaCategory = (double) 0;
+		DocumentSentiment = (double) 0;
+		PrimaEntita = "";
+		SecondaEntita = "";
+		TerzaEntita = "";
+		SottotipoPrimaEntita = "";
+		SottotipoSecondaEntita = "";
+		SottotipoTerzaEntita = "";
+		ConteggioPrimaEntita = 0;
+		ConteggioSecondaEntita = 0;
+		ConteggioTerzaEntita = 0;
+		Relazioni = "";
 		List<KeywordsResult> ks = response.getKeywords();
 		int nkeyw = ks.size();
 		if (nkeyw > 0) {
@@ -147,7 +181,25 @@ public class ElaborazioneDBWatsonCONAdestramnto {
 			TerzaCategory = cat.get(2).getLabel();
 			RelevanceTerzaCategory = cat.get(2).getScore();
 		}
-
+		
+		List<EntitiesResult> er = response.getEntities();
+		int ner=er.size();
+		if (ner > 0) {
+			PrimaEntita = er.get(0).getType();
+			SottotipoPrimaEntita = er.get(0).getDisambiguation().getSubtype().toString();
+			ConteggioPrimaEntita = er.get(0).getCount();
+		}
+		if (ner > 1) {
+			SecondaEntita = er.get(1).getType();
+			SottotipoSecondaEntita = er.get(1).getDisambiguation().getSubtype().toString();
+			ConteggioSecondaEntita = er.get(1).getCount();
+		}
+		if (ner > 2) {
+			TerzaEntita = er.get(2).getType();
+			SottotipoTerzaEntita = er.get(2).getDisambiguation().getSubtype().toString();
+			ConteggioTerzaEntita = er.get(2).getCount();
+		}
+		Relazioni = response.getRelations().toString();
 		DocumentSentiment = response.getSentiment().getDocument().getScore();
 
 	}
@@ -170,7 +222,17 @@ public class ElaborazioneDBWatsonCONAdestramnto {
 			theInsert.setDouble(12, RelevanceSecondaCategory.doubleValue());			
 			theInsert.setDouble(13, RelevanceTerzaCategory.doubleValue());	
 			theInsert.setDouble(14, DocumentSentiment.doubleValue());	
-			theInsert.setInt(15, (int) duration);	
+			theInsert.setString(15, PrimaEntita);
+			theInsert.setString(16, SecondaEntita);			
+			theInsert.setString(17, TerzaEntita);
+			theInsert.setString(18, SottotipoPrimaEntita);
+			theInsert.setString(19, SottotipoSecondaEntita);			
+			theInsert.setString(20, SottotipoTerzaEntita);
+			theInsert.setInt(21, ConteggioPrimaEntita);
+			theInsert.setInt(22, ConteggioSecondaEntita);			
+			theInsert.setInt(23, ConteggioTerzaEntita);
+			theInsert.setString(24, Relazioni);
+			theInsert.setInt(25, (int) duration);	
 			theInsert.execute();
 			dbconn.commit();
 		} catch (SQLException e1) {

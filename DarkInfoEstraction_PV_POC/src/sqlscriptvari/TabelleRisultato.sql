@@ -32,6 +32,16 @@ CREATE TABLE "DASH13540"."POC_ResultSILEARNING" (
 	    "RelevanceSecondaCategory" FLOAT,	    
 	    "RelevanceTerzaaCategory" FLOAT,	
 	    "DocumentSentiment" FLOAT,
+	    "PrimaEntita" VARCHAR(50),
+		"SecondaEntita" VARCHAR(50),
+		"TerzaEntita" VARCHAR(50),
+	    "SottotipoPrimaEntita" VARCHAR(50),
+		"SottotipoSecondaEntita" VARCHAR(50),
+		"SottotipoTerzaEntita" VARCHAR(50),
+	    "ConteggioPrimaEntita" INTEGER,
+		"ConteggioSecondaEntita" INTEGER,
+		"ConteggioTerzaEntita" INTEGER,
+		"Relazioni" VARCHAR(5000),
 	    "MillisecElaborazioneWatson" INTEGER
 )
 	DATA CAPTURE NONE;
