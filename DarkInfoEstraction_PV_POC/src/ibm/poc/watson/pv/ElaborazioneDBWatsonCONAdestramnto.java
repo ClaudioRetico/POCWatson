@@ -84,11 +84,11 @@ public class ElaborazioneDBWatsonCONAdestramnto {
 	private static void initwatson() {
 		service = new NaturalLanguageUnderstanding(NaturalLanguageUnderstanding.VERSION_DATE_2017_02_27,
 				"f1f3adf3-ad1d-4fd3-ae9b-7b284f26e858", "FmdO61U1LpWn");
-		EntitiesOptions entitiesOptions = new EntitiesOptions.Builder().emotion(true).sentiment(true).limit(3).build();
+		EntitiesOptions entitiesOptions = new EntitiesOptions.Builder().emotion(true).sentiment(true).limit(3).model("10:d2b034f8-8dfc-4976-bf73-3cbba2d6dc36").build();
 		KeywordsOptions keywordsOptions = new KeywordsOptions.Builder().emotion(true).sentiment(true).limit(3).build();
 		ConceptsOptions conceptOptions = new ConceptsOptions.Builder().limit(3).build();
 		CategoriesOptions categoryOptions = new CategoriesOptions();
-		RelationsOptions relations = new RelationsOptions.Builder().build();
+		RelationsOptions relations = new RelationsOptions.Builder().model("10:d2b034f8-8dfc-4976-bf73-3cbba2d6dc36").build();
 		SemanticRolesOptions semanticRoles = new SemanticRolesOptions.Builder().build();
 		SentimentOptions sentiment = new SentimentOptions.Builder().build();
 		features = new Features.Builder().entities(entitiesOptions).keywords(keywordsOptions).concepts(conceptOptions)

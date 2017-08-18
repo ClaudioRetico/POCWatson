@@ -17,4 +17,12 @@ CREATE
                 "DASH13540"."POC_ResultNOLEARNING" elab
             WHERE
                 elab."Case ID" = comp."Case ID"
+        )
+     AND NOT EXISTS(
+            SELECT
+                *
+            FROM
+                "DASH13540"."POC_ResultSILEARNING" elab1
+            WHERE
+                elab1."Case ID" = comp."Case ID"
         );
