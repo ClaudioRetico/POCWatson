@@ -5,3 +5,7 @@ truncate table "DASH13540"."BaseID" immediate
 truncate table "DASH13540"."POC_ResultSILEARNING" immediate;
 
 select count(*) from "DASH13540"."POC_ResultSILEARNING";
+
+truncate table "DASH13540"."POC_ResultSIREGOLE" immediate;
+
+select count(*) from "DASH13540"."POC_ResultSIREGOLE";
